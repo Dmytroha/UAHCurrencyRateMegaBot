@@ -1,7 +1,7 @@
 package org.bot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.bot.model.User;
+import org.bot.model.UserSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +18,9 @@ public class UserStorage {
         this.objectMapper = new ObjectMapper();
     }
 
-    public List<User> getUsers() {
+    public List<UserSettings> getUsers() {
         try {
-            User[] usersArray = objectMapper.readValue(storageFile, User[].class);
+            UserSettings[] usersArray = objectMapper.readValue(storageFile, UserSettings[].class);
             return new ArrayList<>(Arrays.asList(usersArray));
         } catch (IOException e) {
             e.printStackTrace();
@@ -28,9 +28,9 @@ public class UserStorage {
         }
     }
 
-    public void saveUsers(List<User> users) {
+    public void saveUsers(List<UserSettings> userSettings) {
         try {
-            objectMapper.writeValue(storageFile, users);
+            objectMapper.writeValue(storageFile, userSettings);
         } catch (IOException e) {
             e.printStackTrace();
         }

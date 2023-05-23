@@ -2,7 +2,7 @@ package org.bot.model;
 
 import java.time.LocalTime;
 
-public class User {
+public class UserSettings {
     private String id;
     private String bank;
     private String[] currencies;
@@ -10,7 +10,7 @@ public class User {
     private LocalTime notificationTime;
 
 
-    public User(String id, String bank, String[] currencies, int decimals, LocalTime notificationTime) {
+    public UserSettings(String id, String bank, String[] currencies, int decimals, LocalTime notificationTime) {
         this.id = id;
         this.bank = bank;
         this.currencies = currencies;
