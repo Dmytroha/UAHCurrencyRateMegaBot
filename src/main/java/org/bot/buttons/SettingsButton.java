@@ -1,23 +1,42 @@
 package org.bot.buttons;
 
+import org.bot.telegram.CurrencyTelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SettingsButton {
-    //@Override
+    private final CurrencyTelegramBot bot;
+
+    public SettingsButton(CurrencyTelegramBot bot) {
+        this.bot = bot;
+    }
+    public void execute(SendMessage message) {
+        String text = "Налаштування";
+        List<String> buttons = Arrays.asList("Кількість знаків після коми", "Банк", "Валюти", "Час оповіщень");
+        attachButtons(message, buttons);
+        message.setText(text);
+    }
+
     public void onUpdateReceived(Update update) {
-        Long chatId = getChatId(update);
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-
             if (messageText.equals("Налаштування")) {
-                showSettingsMenu(chatId);
+                long chatId = getChatId(update);
+                SendMessage message = createMessage("Меню налаштувань", chatId);
+                execute(message);
+                try {
+                    executeSendMessage(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -26,28 +45,19 @@ public class SettingsButton {
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setParseMode("markdown");
-        message.setChatId(chatId);
+        message.setChatId(String.valueOf(chatId));
         return message;
     }
 
-
-    private SendMessage createMessage(String text) {
-        SendMessage message = new SendMessage();
-        message.setText(text);
-        message.setParseMode("markdown");
-        return message;
-    }
-
-    public Long getChatId(Update update) {
-        if(update.hasMessage()) {
-            return update.getMessage().getFrom().getId();
+    private long getChatId(Update update) {
+        if (update.hasMessage()) {
+            return update.getMessage().getChatId();
         }
-        if(update.hasCallbackQuery()) {
-            return update.getCallbackQuery().getFrom().getId();
+        if (update.hasCallbackQuery()) {
+            return update.getCallbackQuery().getMessage().getChatId();
         }
-        return null;
+        return 0;
     }
-
 
     private void attachButtons(SendMessage message, List<String> buttons) {
         InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder()
@@ -64,27 +74,8 @@ public class SettingsButton {
         message.setReplyMarkup(keyboardMarkup);
     }
 
-
-
-    private void showSettingsMenu(long chatId) {
-        SendMessage message = createMessage("Меню налаштувань");
-        message.setChatId(chatId);
-        List<String> buttons = Arrays.asList("Кількість знаків після коми", "Банк", "Валюти", "Час оповіщень");
-        attachButtons(message, buttons);
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void execute(SendMessage message) throws TelegramApiException {
-        try {
-            execute(message);
-        } catch (TelegramApiRequestException e) {
-            // Обробка помилок, пов'язаних з відправкою запиту до Telegram API
-            e.printStackTrace();
-        }
+    private void executeSendMessage(SendMessage message) throws TelegramApiException {
+        execute(message);
     }
 
 }
