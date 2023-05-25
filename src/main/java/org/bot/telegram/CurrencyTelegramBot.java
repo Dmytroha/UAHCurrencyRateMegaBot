@@ -51,11 +51,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                     startButton.execute(message);
                     break;
             }
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+           
 
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
