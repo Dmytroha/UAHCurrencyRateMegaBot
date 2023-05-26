@@ -9,6 +9,8 @@ public class UserSettings {
     private int decimals;
     private LocalTime notificationTime;
 
+    public UserSettings() {
+    }
 
     public UserSettings(String id, String bank, String[] currencies, int decimals, LocalTime notificationTime) {
         this.id = id;
@@ -18,6 +20,7 @@ public class UserSettings {
         this.notificationTime = notificationTime;
 
     }
+
 
     public String getId() {
         return id;

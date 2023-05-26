@@ -1,5 +1,6 @@
 package org.bot.telegram;
 
+
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,25 +8,26 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.bot.buttons.StartButton;
 import org.bot.buttons.GetInfoButton;
 import org.bot.buttons.SettingsButton;
+import org.bot.service.UserStorage;
 
 
 
-/*
-Это класс нашего бота
- */
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
+
+
     private static final String START_COMMAND = "start";
     private static final String GET_INFO_COMMAND = "Отримати інфо";
     private static final String SETTINGS_COMMAND = "Налаштування";
 
+    private final GetInfoButton getInfoButton;
+    private final SettingsButton settingsButton;
+    private final StartButton startButton;
 
-    private GetInfoButton getInfoButton;
-    private SettingsButton settingsButton;
-    private StartButton startButton;
 
     public CurrencyTelegramBot() {
+        UserStorage userStorage = new UserStorage();
         startButton = new StartButton(this);
-        getInfoButton = new GetInfoButton(this);
+        getInfoButton = new GetInfoButton(this, userStorage);
         settingsButton = new SettingsButton(this);
     }
 
@@ -51,7 +53,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                     startButton.execute(message);
                     break;
             }
-           
 
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
@@ -59,6 +60,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             SendMessage message = new SendMessage();
             message.setChatId(String.valueOf(chatId));
             switch (callbackData) {
+                case "/" + START_COMMAND:
+                    startButton.execute(message);
+                    break;
                 case GET_INFO_COMMAND:
                     getInfoButton.execute(message);
                     break;
@@ -71,6 +75,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.err.println("Invalid command");
         }
     }
 
