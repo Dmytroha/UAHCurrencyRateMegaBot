@@ -14,10 +14,13 @@ import java.util.stream.Collectors;
 
 public class SettingsButton {
     private final CurrencyTelegramBot bot;
+    private final DecimalPlacesButton decimalPlacesButton;
 
     public SettingsButton(CurrencyTelegramBot bot) {
         this.bot = bot;
+        this.decimalPlacesButton = new DecimalPlacesButton(bot);
     }
+
     public void execute(SendMessage message) {
         String text = "Налаштування";
         List<String> buttons = Arrays.asList("Кількість знаків після коми", "Банк", "Валюти", "Час оповіщень");
@@ -26,7 +29,30 @@ public class SettingsButton {
     }
 
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        if (update.hasCallbackQuery()) {
+            String callbackData = update.getCallbackQuery().getData();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            switch (callbackData) {
+                case "Кількість знаків після коми":
+                    decimalPlacesButton.execute(createMessage("Оберіть кількість знаків після коми", chatId));
+                    break;
+                case "Банк":
+                    // Виклик методу для кнопки "Банк"
+                    break;
+                case "Валюти":
+                    // Виклик методу для кнопки "Валюти"
+                    break;
+                case "Час оповіщень":
+                    // Виклик методу для кнопки "Час оповіщень"
+                    break;
+            }
+            try {
+                executeSendMessage(createMessage("Ви обрали " + callbackData, chatId));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             if (messageText.equals("Налаштування")) {
                 long chatId = getChatId(update);

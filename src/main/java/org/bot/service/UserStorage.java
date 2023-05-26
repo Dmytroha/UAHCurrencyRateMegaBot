@@ -1,26 +1,27 @@
 package org.bot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.bot.model.UserSettings;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserStorage {
-    private File storageFile;
     private ObjectMapper objectMapper;
+    private String usersJsonPath = "model/user.json";
 
     public UserStorage() {
-        this.storageFile = new File(getClass().getClassLoader().getResource("model/users.json").getFile());
         this.objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     public List<UserSettings> getUsers() {
         try {
-            UserSettings[] usersArray = objectMapper.readValue(storageFile, UserSettings[].class);
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(usersJsonPath);
+            UserSettings[] usersArray = objectMapper.readValue(inputStream, UserSettings[].class);
             return new ArrayList<>(Arrays.asList(usersArray));
         } catch (IOException e) {
             e.printStackTrace();
@@ -30,7 +31,8 @@ public class UserStorage {
 
     public void saveUsers(List<UserSettings> userSettings) {
         try {
-            objectMapper.writeValue(storageFile, userSettings);
+            OutputStream outputStream = new FileOutputStream(new File(getClass().getClassLoader().getResource(usersJsonPath).getFile()));
+            objectMapper.writeValue(outputStream, userSettings);
         } catch (IOException e) {
             e.printStackTrace();
         }
