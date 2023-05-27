@@ -16,21 +16,18 @@ import java.util.stream.Collectors;
 
 
 public class GetInfoButton {
-    private final CurrencyTelegramBot bot;
+
     private final UserStorage userStorage;
 
-    public GetInfoButton(CurrencyTelegramBot bot, UserStorage userStorage) {
-        this.bot = bot;
+    public GetInfoButton(UserStorage userStorage) {
+
         this.userStorage = userStorage;
     }
 
     public void execute(SendMessage message) {
         try {
             String chatId = message.getChatId();
-            UserSettings userSettings = userStorage.getUsers().stream()
-                    .filter(user -> user.getId().equals(chatId))
-                    .findFirst()
-                    .orElseGet(() -> createDefaultUserSettings(chatId));
+            UserSettings userSettings = userStorage.getUsers().stream().filter(user -> user.getId().equals(chatId)).findFirst().orElseGet(() -> createDefaultUserSettings(chatId));
 
             message.setText("Інформація для користувача " + chatId + ": Ви обрали банк " + userSettings.getBank() + ", валюти " + Arrays.toString(userSettings.getCurrencies()) + ", та час сповіщення " + userSettings.getNotificationTime());
 
@@ -39,12 +36,6 @@ public class GetInfoButton {
             e.printStackTrace();
         }
 
-        try {
-            bot.execute(message);
-        } catch (TelegramApiException e) {
-            System.err.println("Error during get info button call");
-            e.printStackTrace();
-        }
     }
 
     private UserSettings createDefaultUserSettings(String chatId) {
@@ -54,16 +45,7 @@ public class GetInfoButton {
     }
 
     private void attachButtons(SendMessage message, List<String> buttons) {
-        InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder()
-                .keyboard(Collections.singletonList(
-                        buttons.stream()
-                                .map(buttonName -> InlineKeyboardButton.builder()
-                                        .text(buttonName)
-                                        .callbackData(buttonName)
-                                        .build())
-                                .collect(Collectors.toList())
-                ))
-                .build();
+        InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder().keyboard(Collections.singletonList(buttons.stream().map(buttonName -> InlineKeyboardButton.builder().text(buttonName).callbackData(buttonName).build()).collect(Collectors.toList()))).build();
 
         message.setReplyMarkup(keyboardMarkup);
     }

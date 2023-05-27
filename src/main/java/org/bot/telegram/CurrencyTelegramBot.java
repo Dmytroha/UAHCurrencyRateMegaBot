@@ -15,7 +15,7 @@ import org.bot.service.UserStorage;
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
 
-    private static final String START_COMMAND = "start";
+    private static final String START_COMMAND = "/start";
     private static final String GET_INFO_COMMAND = "Отримати інфо";
     private static final String SETTINGS_COMMAND = "Налаштування";
 
@@ -27,7 +27,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public CurrencyTelegramBot() {
         UserStorage userStorage = new UserStorage();
         startButton = new StartButton(this);
-        getInfoButton = new GetInfoButton(this, userStorage);
+        getInfoButton = new GetInfoButton(userStorage);
         settingsButton = new SettingsButton(this);
     }
 
@@ -38,38 +38,13 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
             SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            switch (messageText) {
-                case "/" + START_COMMAND:
-                    startButton.execute(message);
-                    break;
-                case GET_INFO_COMMAND:
-                    getInfoButton.execute(message);
-                    break;
-                case SETTINGS_COMMAND:
-                    settingsButton.execute(message);
-                    break;
-                default:
-                    startButton.execute(message);
-                    break;
-            }
+            processButtons(messageText, chatId, message);
 
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            switch (callbackData) {
-                case "/" + START_COMMAND:
-                    startButton.execute(message);
-                    break;
-                case GET_INFO_COMMAND:
-                    getInfoButton.execute(message);
-                    break;
-                case SETTINGS_COMMAND:
-                    settingsButton.execute(message);
-                    break;
-            }
+            processButtons(callbackData, chatId, message);
             try {
                 execute(message);
             } catch (TelegramApiException e) {
@@ -80,8 +55,22 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         }
     }
 
-
-
+    private void processButtons(String messageText, long chatId, SendMessage message) {
+        message.setChatId(String.valueOf(chatId));
+        switch (messageText) {
+            case START_COMMAND:
+                startButton.execute(message);
+                break;
+            case GET_INFO_COMMAND:
+                getInfoButton.execute(message);
+                break;
+            case SETTINGS_COMMAND:
+                settingsButton.execute(message);
+                break;
+            default:
+                break;
+        }
+    }
 
 
     @Override
