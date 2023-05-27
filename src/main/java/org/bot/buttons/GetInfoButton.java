@@ -2,11 +2,9 @@ package org.bot.buttons;
 
 import org.bot.model.UserSettings;
 import org.bot.service.UserStorage;
-import org.bot.telegram.CurrencyTelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 
 
 public class GetInfoButton {
-
+    public static final String GET_INFO_COMMAND = "Отримати інфо";
     private final UserStorage userStorage;
 
     public GetInfoButton(UserStorage userStorage) {
@@ -49,7 +47,6 @@ public class GetInfoButton {
 
         message.setReplyMarkup(keyboardMarkup);
     }
-
 }
 
 

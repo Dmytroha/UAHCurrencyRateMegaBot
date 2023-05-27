@@ -1,24 +1,20 @@
 package org.bot.buttons;
 
-import org.bot.telegram.CurrencyTelegramBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SettingsButton {
-    private final CurrencyTelegramBot bot;
-    private final DecimalPlacesButton decimalPlacesButton;
+    public static final String SETTINGS_COMMAND = "Налаштування";
 
-    public SettingsButton(CurrencyTelegramBot bot) {
-        this.bot = bot;
-        this.decimalPlacesButton = new DecimalPlacesButton(bot);
+    public SettingsButton() {
     }
 
     public void execute(SendMessage message) {
@@ -35,37 +31,32 @@ public class SettingsButton {
 
             switch (callbackData) {
                 case "Кількість знаків після коми":
-                    decimalPlacesButton.execute(createMessage("Оберіть кількість знаків після коми", chatId));
+                    SendMessage message = createMessage("Оберіть кількість знаків після коми", chatId);
+                    List<String> buttons = Arrays.asList("2", "3", "4");
+                    attachButtons(message, buttons);
                     break;
                 case "Банк":
-                    // Виклик методу для кнопки "Банк"
+                    message = createMessage("Оберіть банк", chatId);
+                    buttons = Arrays.asList("НБУ", "ПриватБанк", "Монобанк");
+                    attachButtons(message, buttons);
                     break;
                 case "Валюти":
-                    // Виклик методу для кнопки "Валюти"
+                    message = createMessage("Оберіть валюту", chatId);
+                    buttons = Arrays.asList("USD", "EUR");
+                    attachButtons(message, buttons);
                     break;
                 case "Час оповіщень":
-                    // Виклик методу для кнопки "Час оповіщень"
+                    message = createMessage("Оберіть час оповіщень", chatId);
+                    buttons = IntStream.rangeClosed(9, 18)
+                            .mapToObj(Integer::toString)
+                            .collect(Collectors.toList());
+                    buttons.add("Вимкнути повідомлення");
+                    attachButtons(message, buttons);
                     break;
-            }
-            try {
-                executeSendMessage(createMessage("Ви обрали " + callbackData, chatId));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            if (messageText.equals("Налаштування")) {
-                long chatId = getChatId(update);
-                SendMessage message = createMessage("Меню налаштувань", chatId);
-                execute(message);
-                try {
-                    executeSendMessage(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
+
 
     private SendMessage createMessage(String text, long chatId) {
         SendMessage message = new SendMessage();
@@ -98,10 +89,6 @@ public class SettingsButton {
                 .build();
 
         message.setReplyMarkup(keyboardMarkup);
-    }
-
-    private void executeSendMessage(SendMessage message) throws TelegramApiException {
-        execute(message);
     }
 
 }
