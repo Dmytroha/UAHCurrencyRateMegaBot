@@ -41,7 +41,7 @@ public class NbuCurrencyService implements CurrencyService {
                 .filter(it -> it.getCc() == currency)
                 .map(CurrencyItem::getRate)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(RuntimeException::new);
     }
 
 }
