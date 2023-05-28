@@ -8,6 +8,7 @@ public class UserSettings {
     private String[] currencies;
     private int decimals;
     private LocalTime notificationTime;
+
     private boolean isNotify;
 
     public UserSettings() {
@@ -28,6 +29,8 @@ public class UserSettings {
 
     public void setNotify(boolean isNotify) {
         this.isNotify = isNotify;
+        if (isNotify != true)
+            this.notificationTime = null;
     }
 
     public String getId() {
@@ -67,9 +70,6 @@ public class UserSettings {
     }
 
     public void setNotificationTime(LocalTime notificationTime) {
-        if (isNotify)
-            this.notificationTime = notificationTime;
-        else
-            this.notificationTime = null;
+        this.notificationTime = notificationTime;
     }
 }
