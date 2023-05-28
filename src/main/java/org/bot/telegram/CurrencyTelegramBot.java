@@ -1,6 +1,7 @@
 package org.bot.telegram;
 
 
+import org.bot.buttons.NotifyTimeButton;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,17 +21,21 @@ import java.util.stream.IntStream;
 
 import static org.bot.buttons.GetInfoButton.GET_INFO_COMMAND;
 import static org.bot.buttons.SettingsButton.SETTINGS_COMMAND;
+import static org.bot.buttons.NotifyTimeButton.NOTIFY_TIME_COMMAND;
+import static org.bot.buttons.NotifyTimeButton.TURN_OFF_NOTIFICATION;
 
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private final GetInfoButton getInfoButton;
     private final SettingsButton settingsButton;
+    private NotifyTimeButton notifyTimeButton;
 
     public CurrencyTelegramBot() {
         register(new StartButton());
         UserStorage userStorage = new UserStorage();
         getInfoButton = new GetInfoButton(userStorage);
         settingsButton = new SettingsButton();
+        notifyTimeButton = new NotifyTimeButton(this);
     }
 
     @Override
@@ -61,6 +66,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             case SETTINGS_COMMAND:
                 settingsButton.execute(message);
                 break;
+            case NOTIFY_TIME_COMMAND:
+                notifyTimeButton.execute(message);
+                break;
+            case TURN_OFF_NOTIFICATION:
+                //notifyTimeButton.handleNotificationTimeButton(update, callbackData);
+
             default:
                 return false;
         }
