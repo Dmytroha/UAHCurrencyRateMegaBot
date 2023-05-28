@@ -1,38 +1,41 @@
 package org.bot.buttons;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.bot.telegram.CurrencyTelegramBot;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StartButton {
-    private final CurrencyTelegramBot bot;
+public class StartButton extends BotCommand {
 
-    public StartButton(CurrencyTelegramBot bot) {
-        this.bot = bot;
+    public StartButton() {
+        super("start", "start command");
     }
+    @Override
+    public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
 
-    public void execute(SendMessage message) {
+        SendMessage message = new SendMessage();
         String text = "Ласкаво просимо. Цей бот допоможе відслідковувати актуальні курси валют";
-        if (message.getReplyMarkup() == null) {
-            List<String> buttons = Arrays.asList("Отримати інфо", "Налаштування");
-            attachButtons(message, buttons);
-        }
-
         message.setText(text);
+        message.setChatId(chat.getId());
+        List<String> buttons = Arrays.asList("Отримати інфо", "Налаштування");
+        attachButtons(message, buttons);
 
         try {
-            bot.execute(message);
+            absSender.execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            System.out.println("can't send message to user");
         }
+
     }
+
 
     private void attachButtons(SendMessage message, List<String> buttons) {
         InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder()

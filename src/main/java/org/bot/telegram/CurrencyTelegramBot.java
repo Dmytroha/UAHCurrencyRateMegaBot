@@ -4,84 +4,68 @@ package org.bot.telegram;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.bot.buttons.StartButton;
 import org.bot.buttons.GetInfoButton;
 import org.bot.buttons.SettingsButton;
 import org.bot.service.UserStorage;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.bot.buttons.GetInfoButton.GET_INFO_COMMAND;
+import static org.bot.buttons.SettingsButton.SETTINGS_COMMAND;
 
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
-
-
-    private static final String START_COMMAND = "start";
-    private static final String GET_INFO_COMMAND = "Отримати інфо";
-    private static final String SETTINGS_COMMAND = "Налаштування";
-
     private final GetInfoButton getInfoButton;
     private final SettingsButton settingsButton;
-    private final StartButton startButton;
-
 
     public CurrencyTelegramBot() {
+        register(new StartButton());
         UserStorage userStorage = new UserStorage();
-        startButton = new StartButton(this);
-        getInfoButton = new GetInfoButton(this, userStorage);
-        settingsButton = new SettingsButton(this);
+        getInfoButton = new GetInfoButton(userStorage);
+        settingsButton = new SettingsButton();
     }
 
     @Override
     public void processNonCommandUpdate(Update update) {
         /*Метод виконується, коли до бота приходить команда*/
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-            SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            switch (messageText) {
-                case "/" + START_COMMAND:
-                    startButton.execute(message);
-                    break;
-                case GET_INFO_COMMAND:
-                    getInfoButton.execute(message);
-                    break;
-                case SETTINGS_COMMAND:
-                    settingsButton.execute(message);
-                    break;
-                default:
-                    startButton.execute(message);
-                    break;
-            }
-
-        } else if (update.hasCallbackQuery()) {
+        if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            switch (callbackData) {
-                case "/" + START_COMMAND:
-                    startButton.execute(message);
-                    break;
-                case GET_INFO_COMMAND:
-                    getInfoButton.execute(message);
-                    break;
-                case SETTINGS_COMMAND:
-                    settingsButton.execute(message);
-                    break;
+            boolean process = processButtons(callbackData, chatId, message);
+            if (process) {
+                try {
+                    super.execute(message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.err.println("Invalid command");
         }
+
     }
 
-
-
+    private boolean processButtons(String messageText, long chatId, SendMessage message) {
+        message.setChatId(String.valueOf(chatId));
+        switch (messageText) {
+            case GET_INFO_COMMAND:
+                getInfoButton.execute(message);
+                break;
+            case SETTINGS_COMMAND:
+                settingsButton.execute(message);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 
 
     @Override
@@ -93,6 +77,5 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public String getBotToken() {
         return Constants.BOT_TOKEN;
     }
-
 
 }
