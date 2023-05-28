@@ -1,51 +1,33 @@
 package org.bot.telegram;
 
 
-import org.bot.buttons.NotifyTimeButton;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.bot.buttons.StartButton;
 import org.bot.buttons.GetInfoButton;
 import org.bot.buttons.SettingsButton;
 import org.bot.service.UserStorage;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.bot.buttons.GetInfoButton.GET_INFO_COMMAND;
-import static org.bot.buttons.SettingsButton.SETTINGS_COMMAND;
-import static org.bot.buttons.NotifyTimeButton.NOTIFY_TIME_COMMAND;
-import static org.bot.buttons.NotifyTimeButton.TURN_OFF_NOTIFICATION;
 
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private final GetInfoButton getInfoButton;
     private final SettingsButton settingsButton;
-    private NotifyTimeButton notifyTimeButton;
 
     public CurrencyTelegramBot() {
         register(new StartButton());
         UserStorage userStorage = new UserStorage();
         getInfoButton = new GetInfoButton(userStorage);
         settingsButton = new SettingsButton();
-        notifyTimeButton = new NotifyTimeButton(this);
     }
 
     @Override
     public void processNonCommandUpdate(Update update) {
         /*Метод виконується, коли до бота приходить команда*/
         if (update.hasCallbackQuery()) {
-            String callbackData = update.getCallbackQuery().getData();
-            long chatId = update.getCallbackQuery().getMessage().getChatId();
             SendMessage message = new SendMessage();
-            boolean process = processButtons(callbackData, chatId, message);
+            boolean process = processButtons(update, message);
             if (process) {
                 try {
                     super.execute(message);
@@ -57,25 +39,70 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     }
 
-    private boolean processButtons(String messageText, long chatId, SendMessage message) {
+    private boolean processButtons(Update update, SendMessage message) {
+        String callbackData = update.getCallbackQuery().getData();
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+
         message.setChatId(String.valueOf(chatId));
-        switch (messageText) {
-            case GET_INFO_COMMAND:
+
+        String command = update.getCallbackQuery().getData();
+        if (callbackData.contains(":")) {
+            // if messageText contains
+            command = command.split(":")[0];
+        }
+
+        boolean process = true;
+        switch (command) {
+            case "info":
                 getInfoButton.execute(message);
                 break;
-            case SETTINGS_COMMAND:
+            case "settings":
                 settingsButton.execute(message);
                 break;
-            case NOTIFY_TIME_COMMAND:
-                notifyTimeButton.execute(message);
+            case "settings.precision":
+                settingsButton.precision(message);
                 break;
-            case TURN_OFF_NOTIFICATION:
-                //notifyTimeButton.handleNotificationTimeButton(update, callbackData);
-
+            case "settings.precision.data":
+                String precision = callbackData.split(":")[1];
+                System.out.println(precision);
+                // save precision value to user, user userService to save data
+                settingsButton.precisionHandler(precision);
+                process = false;
+                break;
+            case "settings.bank":
+                settingsButton.bank(message);
+                break;
+            case "settings.bank.data":
+                String bank = callbackData.split(":")[1];
+                System.out.println(bank);
+                // save precision value to user, user userService to save data
+                settingsButton.bankHandler(bank);
+                process = false;
+                break;
+            case "settings.currency":
+                settingsButton.currency(message);
+                break;
+            case "settings.currency.data":
+                String currency = callbackData.split(":")[1];
+                System.out.println(currency);
+                // save precision value to user, user userService to save data
+                settingsButton.currencyHandler(currency);
+                process = false;
+                break;
+            case "settings.time":
+                settingsButton.time(message);
+                break;
+            case "settings.time.data":
+                String time = callbackData.split(":")[1];
+                System.out.println(time);
+                // save precision value to user, user userService to save data
+                settingsButton.timeHandler(time);
+                process = false;
+                break;
             default:
                 return false;
         }
-        return true;
+        return process;
     }
 
 
