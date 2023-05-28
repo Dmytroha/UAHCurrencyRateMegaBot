@@ -19,10 +19,55 @@ public class SettingsButton {
 
     public void execute(SendMessage message) {
         String text = "Налаштування";
-        List<String> buttons = Arrays.asList("Кількість знаків після коми", "Банк", "Валюти", "Час оповіщень");
-        attachButtons(message, buttons);
         message.setText(text);
+
+        InlineKeyboardMarkup buttons = CommandFactory.buttons(
+                Arrays.asList(
+                        "settings.precision:Кількість знаків після коми",
+                        "settings.bank:Банк",
+                        "settings.currency:Валюти",
+                        "settings.notification_time:Час оповіщень"
+                )
+        );
+        message.setReplyMarkup(buttons);
     }
+
+    public void precision(SendMessage message) {
+        message.setText("Оберіть кількість знаків після коми");
+        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(Arrays.asList("settings.precision.data:2", "settings.precision.data:3", "settings.precision.data:4"));
+        message.setReplyMarkup(buttons);
+
+    }
+
+    public void precisionHandler(String precision) {
+        System.out.println(precision);
+        // save precision to user settings
+    }
+    public void bank(SendMessage message) {
+        message.setText("Оберіть банк");
+        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(Arrays.asList("settings.precision.data:  НБУ ", "settings.precision.data: Приватбанк ", "settings.precision.data:  Монобанк "));
+        message.setReplyMarkup(buttons);
+    }
+    public void bankHandler(String bank) {
+        System.out.println(bank);
+    }
+    public void currency(SendMessage message) {
+        message.setText("Оберіть валюту");
+        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(Arrays.asList("settings.precision.data: USD ", "settings.precision.data:  EUR "));
+        message.setReplyMarkup(buttons);
+    }
+    public void currencyHandler(String currency) {
+        System.out.println(currency);
+    }
+    public void time(SendMessage message) {
+        message.setText("Оберіть час оповіщень");
+        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(Arrays.asList("settings.time.data:  9 ", "settings.time.data: 10 ", "settings.time.data:  11 ", "settings.time.data:  12 ", "settings.time.data:  13 ", "settings.time.data:  14 ", "settings.time.data:  15 ", "settings.time.data:  16 ", "settings.time.data:  17 "));
+        message.setReplyMarkup(buttons);
+    }
+    public void timeHandler(String time) {
+        System.out.println(time);
+    }
+
 
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {

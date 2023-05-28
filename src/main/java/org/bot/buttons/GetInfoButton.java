@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 
 public class GetInfoButton {
-    public static final String GET_INFO_COMMAND = "Отримати інфо";
     private final UserStorage userStorage;
 
     public GetInfoButton(UserStorage userStorage) {
@@ -41,12 +40,5 @@ public class GetInfoButton {
 //        userStorage.saveUsers(List.of(defaultSettings));
         return defaultSettings;
     }
-
-    private void attachButtons(SendMessage message, List<String> buttons) {
-        InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder().keyboard(Collections.singletonList(buttons.stream().map(buttonName -> InlineKeyboardButton.builder().text(buttonName).callbackData(buttonName).build()).collect(Collectors.toList()))).build();
-
-        message.setReplyMarkup(keyboardMarkup);
-    }
 }
-
 
