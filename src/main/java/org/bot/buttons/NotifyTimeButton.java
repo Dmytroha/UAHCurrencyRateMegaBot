@@ -79,7 +79,7 @@ public class NotifyTimeButton {
                 }
             } else {
 
-                LocalTime selectedTime = callbackData;
+                LocalTime selectedTime = LocalTime.parse(callbackData);
 
 
                 UserStorage userStorage = new UserStorage();
