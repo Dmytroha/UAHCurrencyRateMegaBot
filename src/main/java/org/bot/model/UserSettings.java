@@ -9,16 +9,28 @@ public class UserSettings {
     private int decimals;
     private LocalTime notificationTime;
 
+    private boolean isNotify;
+
     public UserSettings() {
     }
 
-    public UserSettings(String id, String bank, String[] currencies, int decimals, LocalTime notificationTime) {
+    public UserSettings(String id) {
         this.id = id;
-        this.bank = bank;
-        this.currencies = currencies;
-        this.decimals = decimals;
-        this.notificationTime = notificationTime;
+        bank = "PrivatBank";
+        currencies = new String[] { "USD" };
+        decimals = 2;
+        notificationTime = notificationTime.of(9, 0, 0);
+        isNotify = true;
+    }
 
+    public boolean isNotify() {
+        return isNotify;
+    }
+
+    public void setNotify(boolean isNotify) {
+        this.isNotify = isNotify;
+        if (isNotify != true)
+            this.notificationTime = null;
     }
 
 
