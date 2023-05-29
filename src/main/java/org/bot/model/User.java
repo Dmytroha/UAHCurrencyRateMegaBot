@@ -1,9 +1,9 @@
-package org.bot.service;
+package org.bot.model;
 
 import java.time.LocalTime;
 
-public class UserSettings {
-    private String id;
+public class User {
+    private Long id;
     private String bank;
     private String[] currencies;
     private int decimals;
@@ -11,10 +11,11 @@ public class UserSettings {
 
     private boolean isNotify;
 
-    public UserSettings() {
+    public User() {
+
     }
 
-    public UserSettings(String id) {
+    public User(Long id) {
         this.id = id;
         bank = "PrivatBank";
         currencies = new String[] { "USD" };
@@ -33,11 +34,11 @@ public class UserSettings {
             this.notificationTime = null;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

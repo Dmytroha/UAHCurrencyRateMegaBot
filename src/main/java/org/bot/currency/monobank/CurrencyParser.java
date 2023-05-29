@@ -25,7 +25,7 @@ public class CurrencyParser {
         writer.close();
     }
 
-    //
+    // Отримати валюту
     public CurrencyDTO getCurrency(String currency) throws IOException {
         // Використовується для отримання коду валюти
         Currency curr = Currency.getInstance(currency);
