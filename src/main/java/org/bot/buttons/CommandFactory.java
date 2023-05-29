@@ -1,5 +1,7 @@
 package org.bot.buttons;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -7,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommandFactory {
     public static InlineKeyboardMarkup buttons(List<String> buttons) {
         return InlineKeyboardMarkup.builder()

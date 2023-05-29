@@ -19,7 +19,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         register(new StartButton());
         UserStorage userStorage = new UserStorage();
         getInfoButton = new GetInfoButton(userStorage);
-        settingsButton = new SettingsButton();
+        settingsButton = new SettingsButton(userStorage);
     }
 
     @Override
