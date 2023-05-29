@@ -66,37 +66,37 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 String precision = callbackData.split(":")[1];
                 System.out.println(precision);
                 // save precision value to user, user userService to save data
-                settingsButton.precisionHandler(precision);
+                settingsButton.precisionHandler(String.valueOf(chatId), precision);
                 process = false;
                 break;
             case "settings.bank":
                 settingsButton.bank(message);
                 break;
             case "settings.bank.data":
-                String bank = callbackData.split(":")[1];
+                String bank = callbackData.split(":")[1].trim();
                 System.out.println(bank);
                 // save precision value to user, user userService to save data
-                settingsButton.bankHandler(bank);
+                settingsButton.bankHandler(String.valueOf(chatId), bank);
                 process = false;
                 break;
             case "settings.currency":
                 settingsButton.currency(message);
                 break;
             case "settings.currency.data":
-                String currency = callbackData.split(":")[1];
+                String currency = callbackData.split(":")[1].trim();
                 System.out.println(currency);
                 // save precision value to user, user userService to save data
-                settingsButton.currencyHandler(currency);
+                settingsButton.currencyHandler(String.valueOf(chatId), currency);
                 process = false;
                 break;
-            case "settings.time":
+            case "settings.notification_time":
                 settingsButton.time(message);
                 break;
-            case "settings.time.data":
+            case "settings.notification_time.data":
                 String time = callbackData.split(":")[1];
                 System.out.println(time);
                 // save precision value to user, user userService to save data
-                settingsButton.timeHandler(time);
+                settingsButton.timeHandler(String.valueOf(chatId), time);
                 process = false;
                 break;
             default:
