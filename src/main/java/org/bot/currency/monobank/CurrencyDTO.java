@@ -1,4 +1,4 @@
-package org.bot.monobank;
+package org.bot.currency.monobank;
 
 public class CurrencyDTO {
     // Код валюти рахунку відповідно ISO 4217

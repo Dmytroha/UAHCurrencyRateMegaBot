@@ -14,11 +14,13 @@ import java.time.format.DateTimeFormatter;
 public class PrivatCurrencyService implements CurrencyService {
     @Override
     public double getRate(Currency currency) throws URISyntaxException, FileNotFoundException {
-        //Please uncomment URL when button logic will be add (upon clicking it an information is requested)
-        //String URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-        String URL = "https://api.privatbank.ua/p24api/exchange_rates?date="+getCurrentDate();
+        // Please uncomment URL when button logic will be add (upon clicking it an
+        // information is requested)
+        // String URL =
+        // "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+        String URL = "https://api.privatbank.ua/p24api/exchange_rates?date=" + getCurrentDate();
 
-        //Get JSON
+        // Get JSON
         String json;
         try {
             json = Jsoup.connect(URL).ignoreContentType(true).get().body().text();
@@ -35,11 +37,11 @@ public class PrivatCurrencyService implements CurrencyService {
                 .findFirst().orElseThrow()
                 .getSaleRate();
     }
-    private String getCurrentDate(){
+
+    private String getCurrentDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDateTime now = LocalDateTime.now();
-return dtf.format(now);
+        return dtf.format(now);
     }
-
 
 }

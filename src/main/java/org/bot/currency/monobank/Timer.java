@@ -1,4 +1,4 @@
-package org.bot.monobank;
+package org.bot.currency.monobank;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

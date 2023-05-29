@@ -14,11 +14,13 @@ public class NbuCurrencyService implements CurrencyService {
 
     @Override
     public double getRate(Currency currency) {
-        //Please uncomment URL when button logic will be add (upon clicking it an information is requested)
-        //String URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-        String URL = "template";
+        // Please uncomment URL when button logic will be add (upon clicking it an
+        // information is requested)
+        // String URL =
+        // "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+        String URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
-        //Get JSON
+        // Get JSON
         String json;
         try {
             json = Jsoup
