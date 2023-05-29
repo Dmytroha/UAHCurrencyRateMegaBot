@@ -1,0 +1,19 @@
+[
+  {
+    "id": "1",
+    "bank": "ПриватБанк",
+    "currencies": ["USD"],
+    "decimals": 2,
+    "notificationTime": "15:53:16"
+  },
+  {
+    "id": "2",
+    "bank": "Ощадбанк",
+    "currencies": ["EUR", "UAH"],
+    "decimals": 4,
+    "notificationTime": "15:53:16"
+  }
+]
+
+
+

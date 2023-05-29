@@ -1,4 +1,4 @@
-package org.bot.monobank;
+package org.bot.currency.monobank;
 
 import java.io.FileReader;
 import java.io.FileWriter;

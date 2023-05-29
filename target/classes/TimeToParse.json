@@ -1,0 +1,28 @@
+{
+  "lastParsingTime": {
+    "date": {
+      "year": 2023,
+      "month": 5,
+      "day": 29
+    },
+    "time": {
+      "hour": 6,
+      "minute": 17,
+      "second": 5,
+      "nano": 903054200
+    }
+  },
+  "nextParsingTime": {
+    "date": {
+      "year": 2023,
+      "month": 5,
+      "day": 29
+    },
+    "time": {
+      "hour": 6,
+      "minute": 22,
+      "second": 5,
+      "nano": 903054200
+    }
+  }
+}
