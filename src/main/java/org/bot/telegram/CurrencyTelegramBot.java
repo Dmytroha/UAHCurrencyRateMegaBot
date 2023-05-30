@@ -88,10 +88,10 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 settingsButton.currencyHandler( String.valueOf(chatId), currency);
                 process = false;
                 break;
-            case "settings.notification_time":
+            case "settings.time":
                 settingsButton.time(message);
                 break;
-            case "settings.notification_time.data":
+            case "settings.time.data":
                 String time = callbackData.split(":")[1];
                 System.out.println(time);
                 // save precision value to user, user userService to save data
