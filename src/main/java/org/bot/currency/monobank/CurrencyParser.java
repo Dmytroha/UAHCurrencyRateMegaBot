@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Currency;
 import java.util.List;
+
+import org.bot.currency.CurrencyService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import com.google.gson.Gson;
@@ -13,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class CurrencyParser {
     // Отримати дані з банку
+    /*
     public Document getCurrency() throws IOException {
         String url = "https://api.monobank.ua/bank/currency";
         return Jsoup.connect(url).ignoreContentType(true).get();
@@ -24,6 +27,7 @@ public class CurrencyParser {
         writer.write(getCurrency().body().text());
         writer.close();
     }
+     */
 
     //
     public CurrencyDTO getCurrency(String currency) throws IOException {
@@ -32,12 +36,12 @@ public class CurrencyParser {
         CurrencyDTO val = null;
 
         // Якщо настав час парсити час, відновлює дані
-        if (Timer.getTimer().isTimeToParse() == true) {
-            writeCurrencyToJson();
-            Timer.getTimer().updateParsingTime();
-        }
+        //if (Timer.getTimer().isTimeToParse() == true) {
+        //    writeCurrencyToJson();
+        //    Timer.getTimer().updateParsingTime();
+        //}
 
-        FileReader reader = new FileReader("currency.json");
+        FileReader reader = new FileReader("/Users/olha/Desktop/Projects/UAHCurrencyRateMegaBot/src/main/resources/model/mono.json");
         Type type = TypeToken.getParameterized(List.class, CurrencyDTO.class).getType();
         // Створюємо список валют з документу
         List<CurrencyDTO> items = new Gson().fromJson(reader, type);

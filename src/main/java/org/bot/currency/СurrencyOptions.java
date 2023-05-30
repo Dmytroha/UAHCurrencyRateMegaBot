@@ -9,15 +9,15 @@ import org.bot.currency.dto.Currency;
 import org.bot.currency.monobank.CurrencyParser;
 
 public class СurrencyOptions {
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        System.out.println(display("NBU", "USD", 3));
-    }
+    //public static void main(String[] args) throws URISyntaxException, IOException {
+    //    System.out.println(display("NBU", "USD", 3));
+   // }
 
     // Метод на вывод информации по валюте, где принимает бакн, валюту, знаки после
     // запятой
-    public static String display(String bank, String currency, int decimal) throws URISyntaxException, IOException {
+    public static String display(String bank, String currency, int decimal, double rate) throws URISyntaxException, IOException {
         // Переменная куда получим значение валюті банка
-        double rate = 0;
+        //double rate = 0;
         // Проходимся по банкам
         switch (bank) {
             case "PrivateBank":
@@ -27,7 +27,7 @@ public class СurrencyOptions {
                 rate = new NbuCurrencyService().getRate(Currency.valueOf(currency));
                 break;
             case "Monobank":
-                if (currency != "USD" && currency != "EUR")
+                if (!"USD".equals(currency) && !"EUR".equals(currency))
                     rate = new CurrencyParser().getCurrency(currency).getRateCross();
                 else
                     rate = new CurrencyParser().getCurrency(currency).getRateBuy();

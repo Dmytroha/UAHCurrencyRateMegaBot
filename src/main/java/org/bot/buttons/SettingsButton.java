@@ -68,6 +68,20 @@ public class SettingsButton {
 
     }
 
+    private void changeCurrencyButtonToSelected(Update update, UserSettings userSettings, CurrencyTelegramBot bot, String chatId) {
+        EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
+        editMessageReplyMarkup.setChatId(chatId);
+        editMessageReplyMarkup.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
+        InlineKeyboardMarkup buttons = ButtonFactory.createCurrencyOptions(userSettings);
+        editMessageReplyMarkup.setReplyMarkup(buttons);
+        try {
+            bot.execute(editMessageReplyMarkup);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void bank(SendMessage message) {
         String chatId = message.getChatId();
         UserSettings userSettings = getUserSettings(chatId);
@@ -105,10 +119,11 @@ public class SettingsButton {
         message.setReplyMarkup(buttons);
     }
 
-    public void currencyHandler(String chatId, String currency) {
+    public void currencyHandler(CurrencyTelegramBot currencyTelegramBot, Update update, String chatId, String currency) {
         UserSettings userSettings = getUserSettings(chatId);
         Set<String> currencies = new HashSet<>(Arrays.asList(userSettings.getCurrencies()));
 
+        currency = currency.replace(" ✅", "");
         if (currencies.contains(currency)) {
             currencies.remove(currency);
         } else {
@@ -118,6 +133,7 @@ public class SettingsButton {
         userSettings.setCurrencies(currencies.toArray(new String[0]));
 
         saveUserSettings(userSettings);
+        changeCurrencyButtonToSelected(update,userSettings,currencyTelegramBot,chatId);
     }
 
 

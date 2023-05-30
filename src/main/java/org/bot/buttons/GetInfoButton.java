@@ -1,5 +1,8 @@
 package org.bot.buttons;
 
+import org.bot.currency.CurrencyService;
+import org.bot.currency.PrivatCurrencyService;
+import org.bot.currency.dto.Currency;
 import org.bot.currency.СurrencyOptions;
 import org.bot.model.UserSettings;
 import org.bot.service.UserStorage;
@@ -20,7 +23,11 @@ public class GetInfoButton {
     public void execute(SendMessage message) {
         try {
             String chatId = message.getChatId();
-            UserSettings userSettings = userStorage.getUsers().stream().filter(user -> user.getId().equals(chatId)).findFirst().orElseGet(() -> {
+            UserSettings userSettings = userStorage.getUsers()
+                    .stream()
+                    .filter(user -> user.getId().equals(chatId))
+                    .findFirst()
+                    .orElseGet(() -> {
                 UserSettings defaultSettings = createDefaultUserSettings(chatId);
                 List<UserSettings> users = userStorage.getUsers();
                 users.add(defaultSettings);
@@ -29,8 +36,17 @@ public class GetInfoButton {
             });
 
             for (String currency : userSettings.getCurrencies()) {
-                String exchangeRateInfo = СurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals());
-                message.setText("Інформація для користувача " + chatId + ": Ви обрали банк " + userSettings.getBank() + ", валюти " + Arrays.toString(userSettings.getCurrencies()) + ", та час сповіщення " + userSettings.getNotificationTime() + ". " + exchangeRateInfo);
+                CurrencyService privatCurrencyService = new PrivatCurrencyService();
+                //double ratePrivatUSD = privatCurrencyService.getRate(Currency.USD);
+                String exchangeRateInfo = СurrencyOptions.display(
+                        userSettings.getBank(), currency,
+                        userSettings.getDecimals(), privatCurrencyService.getRate(Currency.USD));
+
+                message.setText("Інформація для користувача " + chatId + ": Ви обрали банк " +
+                        userSettings.getBank() + ", валюти " +
+                        Arrays.toString(userSettings.getCurrencies()) +
+                        ", та час сповіщення " + userSettings.getNotificationTime() +
+                        ". " + exchangeRateInfo);
             }
 
         } catch (Exception e) {
@@ -38,7 +54,8 @@ public class GetInfoButton {
             e.printStackTrace();
         }
 
-        InlineKeyboardMarkup buttons = CommandFactory.buttons(Arrays.asList("info:Отримати інфо", "settings:Налаштування"));
+        InlineKeyboardMarkup buttons = CommandFactory.buttons(
+                Arrays.asList("info:Отримати інфо", "settings:Налаштування"));
 
         message.setReplyMarkup(buttons);
         try {

@@ -16,7 +16,7 @@ public class ButtonFactory {
     public static InlineKeyboardMarkup createCurrencyOptions(UserSettings userSettings) {
         return createButtons(
                 "settings.currency.data",
-                Arrays.asList("USD", "EUR"),
+                Arrays.asList("USD", "EUR", "PLN"),
                 (String buttonName) -> Arrays.asList(userSettings.getCurrencies()).contains(buttonName)
         );
     }
@@ -28,6 +28,7 @@ public class ButtonFactory {
                 (String buttonName) -> userSettings.getDecimals() == Integer.parseInt(buttonName)
         );
     }
+
     public static InlineKeyboardMarkup createBankOptions(UserSettings userSettings) {
         return createButtons(
                 "settings.bank.data",
@@ -37,7 +38,8 @@ public class ButtonFactory {
     }
 
 
-    private static InlineKeyboardMarkup createButtons(String path, List<String> buttonNames, Function<String, Boolean> function) {
+    private static InlineKeyboardMarkup createButtons(String path, List<String> buttonNames,
+                                                      Function<String, Boolean> function) {
         List<String> options = new ArrayList<>();
         for (String buttonName : buttonNames) {
             String option = path + ":" + buttonName;

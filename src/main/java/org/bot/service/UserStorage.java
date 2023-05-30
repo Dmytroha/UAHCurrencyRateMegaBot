@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserStorage {
-    private ObjectMapper objectMapper;
-    private String usersJsonPath = "model/user.json";
+    private final ObjectMapper objectMapper;
+    private final String usersJsonPath = "model/user.json";
 
     public UserStorage() {
         this.objectMapper = new ObjectMapper();

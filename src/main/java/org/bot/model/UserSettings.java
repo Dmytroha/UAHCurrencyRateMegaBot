@@ -1,10 +1,12 @@
 package org.bot.model;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @NoArgsConstructor
+@Data
 public class UserSettings {
     private String id;
     private String bank;
