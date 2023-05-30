@@ -36,6 +36,7 @@ public class ButtonFactory {
                 (String buttonName) -> userSettings.getBank().equals(buttonName)
         );
     }
+
     public static InlineKeyboardMarkup createTimeOptions(UserSettings userSettings) {
         List<String> options = new ArrayList<>();
         IntStream.rangeClosed(9, 17).forEach(i -> options.add(String.valueOf(i)));
@@ -45,7 +46,9 @@ public class ButtonFactory {
                 "settings.time.data",
                 options,
                 (String buttonName) -> {
-                    if (userSettings.isNotify() && userSettings.getNotificationTime() != null) {
+                    if (buttonName.equals("disable")) {
+                        return !userSettings.isNotify();
+                    } else if (userSettings.isNotify() && userSettings.getNotificationTime() != null) {
                         return buttonName.equals(String.valueOf(userSettings.getNotificationTime().getHour()));
                     } else {
                         return false;

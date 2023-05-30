@@ -32,7 +32,7 @@ public class SettingsButton {
                 "settings.precision:Кількість знаків після коми",
                 "settings.bank:Банк",
                 "settings.currency:Валюта",
-                "settings.notification_time:Час сповіщень"
+                "settings.time:Час сповіщень"
         ));
         message.setReplyMarkup(buttons);
     }
