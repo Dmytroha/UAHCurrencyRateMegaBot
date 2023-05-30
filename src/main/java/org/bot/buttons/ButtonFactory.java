@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ButtonFactory {
@@ -33,6 +34,23 @@ public class ButtonFactory {
                 "settings.bank.data",
                 Arrays.asList("НБУ", "ПриватБанк", "Монобанк"),
                 (String buttonName) -> userSettings.getBank().equals(buttonName)
+        );
+    }
+    public static InlineKeyboardMarkup createTimeOptions(UserSettings userSettings) {
+        List<String> options = new ArrayList<>();
+        IntStream.rangeClosed(9, 17).forEach(i -> options.add(String.valueOf(i)));
+        options.add("disable");
+
+        return createButtons(
+                "settings.time.data",
+                options,
+                (String buttonName) -> {
+                    if (userSettings.isNotify() && userSettings.getNotificationTime() != null) {
+                        return buttonName.equals(String.valueOf(userSettings.getNotificationTime().getHour()));
+                    } else {
+                        return false;
+                    }
+                }
         );
     }
 
