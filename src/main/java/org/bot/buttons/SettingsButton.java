@@ -140,27 +140,13 @@ public class SettingsButton {
     public void time(SendMessage message) {
         String chatId = message.getChatId();
         UserSettings userSettings = getUserSettings(chatId);
-
         message.setText("Оберіть час сповіщень");
-
-        List<String> options = new ArrayList<>();
-        for (int i = 9; i <= 17; i++) {
-            String option = "settings.time.data:" + i;
-            LocalTime userNotificationTime = userSettings.getNotificationTime();
-            if (userSettings.isNotify() && userNotificationTime != null && userNotificationTime.getHour() == i) {
-                option += " ✅";
-            }
-            options.add(option);
-        }
-        options.add("settings.time.data:disable" + (userSettings.isNotify() ? "" : " ✅"));
-
-        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(options);
+        InlineKeyboardMarkup buttons = ButtonFactory.createTimeOptions(userSettings);
         message.setReplyMarkup(buttons);
     }
 
     public void timeHandler(CurrencyTelegramBot currencyTelegramBot, Update update, String chatId, String time) {
         UserSettings userSettings = getUserSettings(chatId);
-
         if (time.equals("disable")) {
             userSettings.setNotify(false);
             userSettings.setNotificationTime(null);
@@ -179,18 +165,8 @@ public class SettingsButton {
         EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
         editMessageReplyMarkup.setChatId(chatId);
         editMessageReplyMarkup.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
-        List<String> options = new ArrayList<>();
-        for (int i = 9; i <= 17; i++) {
-            String option = "settings.time.data:" + i;
-            LocalTime userNotificationTime = userSettings.getNotificationTime();
-            if (userSettings.isNotify() && userNotificationTime != null && userNotificationTime.getHour() == i) {
-                option += " ✅";
-            }
-            options.add(option);
-        }
-        options.add("settings.time.data:disable" + (userSettings.isNotify() ? "" : " ✅"));
 
-        InlineKeyboardMarkup buttons = CommandFactory.dataButtons(options);
+        InlineKeyboardMarkup buttons = ButtonFactory.createTimeOptions(userSettings);
         editMessageReplyMarkup.setReplyMarkup(buttons);
         try {
             bot.execute(editMessageReplyMarkup);
