@@ -1,7 +1,10 @@
 package org.bot.model;
 
+import lombok.NoArgsConstructor;
+
 import java.time.LocalTime;
 
+@NoArgsConstructor
 public class UserSettings {
     private String id;
     private String bank;
@@ -11,15 +14,12 @@ public class UserSettings {
 
     private boolean isNotify;
 
-    public UserSettings() {
-    }
-
     public UserSettings(String id) {
         this.id = id;
         bank = "PrivatBank";
-        currencies = new String[] { "USD" };
+        currencies = new String[]{"USD"};
         decimals = 2;
-        notificationTime = notificationTime.of(9, 0, 0);
+        notificationTime = LocalTime.of(9, 0, 0);
         isNotify = true;
     }
 
@@ -29,7 +29,7 @@ public class UserSettings {
 
     public void setNotify(boolean isNotify) {
         this.isNotify = isNotify;
-        if (isNotify != true)
+        if (!isNotify)
             this.notificationTime = null;
     }
 
