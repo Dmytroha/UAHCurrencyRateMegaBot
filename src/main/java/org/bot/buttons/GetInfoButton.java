@@ -1,6 +1,6 @@
 package org.bot.buttons;
 
-import org.bot.currency.СurrencyOptions;
+import org.bot.currency.CurrencyOptions;
 import org.bot.model.UserSettings;
 import org.bot.service.UserStorage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,7 +29,7 @@ public class GetInfoButton {
             });
 
             for (String currency : userSettings.getCurrencies()) {
-                String exchangeRateInfo = СurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals());
+                String exchangeRateInfo = CurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals());
                 message.setText("Інформація для користувача " + chatId + ": Ви обрали банк " + userSettings.getBank() + ", валюти " + Arrays.toString(userSettings.getCurrencies()) + ", та час сповіщення " + userSettings.getNotificationTime() + ". " + exchangeRateInfo);
             }
 

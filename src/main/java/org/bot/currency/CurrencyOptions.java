@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 import org.bot.currency.dto.Currency;
 import org.bot.currency.monobank.CurrencyParser;
 
-public class СurrencyOptions {
+public class CurrencyOptions {
     public static void main(String[] args) throws URISyntaxException, IOException {
         System.out.println(display("NBU", "USD", 3));
     }
@@ -20,7 +20,7 @@ public class СurrencyOptions {
         double rate = 0;
         // Проходимся по банкам
         switch (bank) {
-            case "PrivateBank":
+            case "PrivatBank":
                 rate = new PrivatCurrencyService().getRate(Currency.valueOf(currency));
                 break;
             case "NBU":
