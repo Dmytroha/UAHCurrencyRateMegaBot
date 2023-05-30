@@ -1,6 +1,7 @@
 package org.bot.telegram;
 
 
+import org.bot.service.NotificationService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,6 +20,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         UserStorage userStorage = new UserStorage();
         getInfoButton = new GetInfoButton(userStorage);
         settingsButton = new SettingsButton(userStorage);
+        //Таймер виводу користувачеві курсу валют
+        NotificationService.startNotificationProcess(userStorage,this);
     }
 
     @Override
