@@ -17,7 +17,7 @@ public class ButtonFactory {
     public static InlineKeyboardMarkup createCurrencyOptions(UserSettings userSettings) {
         return createButtons(
                 "settings.currency.data",
-                Arrays.asList("USD", "EUR"),
+                Arrays.asList("USD", "EUR", "PLN"),
                 (String buttonName) -> Arrays.asList(userSettings.getCurrencies()).contains(buttonName)
         );
     }
