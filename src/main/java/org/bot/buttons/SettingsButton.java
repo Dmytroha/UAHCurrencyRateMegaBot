@@ -48,7 +48,7 @@ public class SettingsButton {
         UserSettings userSettings = getUserSettings(chatId);
         int precisionValue = Integer.parseInt(precision);
         userSettings.setDecimals(precisionValue);
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         precision(createSendMessage(chatId));
         changeButtonToSelected(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -78,7 +78,7 @@ public class SettingsButton {
     public void bankHandler(CurrencyTelegramBot currencyTelegramBot, Update update, String chatId, String bank) {
         UserSettings userSettings = getUserSettings(chatId);
         userSettings.setBank(bank);
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         bank(createSendMessage(chatId));
         changeButtonToSelectedForBank(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -154,7 +154,7 @@ public class SettingsButton {
             userSettings.setNotificationTime(LocalTime.of(hour, 0, 0));
         }
 
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         time(createSendMessage(chatId));
         changeButtonToSelectedForTime(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -174,10 +174,7 @@ public class SettingsButton {
     }
 
     private UserSettings getUserSettings(String chatId) {
-        return userStorage.getUsers().stream()
-                .filter(user -> user.getId().equals(chatId))
-                .findFirst()
-                .orElseGet(() -> createDefaultUserSettings(chatId));
+        return userStorage.getUser(chatId);
     }
 
     private void saveUserSettings(UserSettings userSettings) {
