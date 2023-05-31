@@ -20,17 +20,14 @@ public class GetInfoButton {
     public void execute(SendMessage message) {
         try {
             String chatId = message.getChatId();
-            UserSettings userSettings = userStorage.getUsers().stream().filter(user -> user.getId().equals(chatId)).findFirst().orElseGet(() -> {
-                UserSettings defaultSettings = createDefaultUserSettings(chatId);
-                List<UserSettings> users = userStorage.getUsers();
-                users.add(defaultSettings);
-                userStorage.saveUsers(users);
-                return defaultSettings;
-            });
+            if(userStorage.isNewPerson(chatId)){
+                userStorage.writeNewUser(chatId);
+            }
+            UserSettings userSettings = userStorage.getUser(chatId);
 
             for (String currency : userSettings.getCurrencies()) {
                 String exchangeRateInfo = CurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals());
-                message.setText("Інформація для користувача " + chatId + ": Ви обрали банк " + userSettings.getBank() + ", валюти " + Arrays.toString(userSettings.getCurrencies()) + ", та час сповіщення " + userSettings.getNotificationTime() + ". " + exchangeRateInfo);
+                message.setText("Ви обрали банк " + userSettings.getBank() + "\nВалюта " + Arrays.toString(userSettings.getCurrencies()) + "\nЧас сповіщення " + userSettings.getNotificationTime() + ".\n" + exchangeRateInfo);
             }
 
         } catch (Exception e) {

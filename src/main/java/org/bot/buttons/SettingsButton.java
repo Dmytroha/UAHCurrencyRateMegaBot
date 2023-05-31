@@ -48,7 +48,7 @@ public class SettingsButton {
         UserSettings userSettings = getUserSettings(chatId);
         int precisionValue = Integer.parseInt(precision);
         userSettings.setDecimals(precisionValue);
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         precision(createSendMessage(chatId));
         changeButtonToSelected(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -78,7 +78,7 @@ public class SettingsButton {
     public void bankHandler(CurrencyTelegramBot currencyTelegramBot, Update update, String chatId, String bank) {
         UserSettings userSettings = getUserSettings(chatId);
         userSettings.setBank(bank);
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         bank(createSendMessage(chatId));
         changeButtonToSelectedForBank(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -104,10 +104,11 @@ public class SettingsButton {
         message.setReplyMarkup(buttons);
     }
 
-    public void currencyHandler(String chatId, String currency) {
+    public void currencyHandler(CurrencyTelegramBot currencyTelegramBot, Update update, String chatId, String currency) {
         UserSettings userSettings = getUserSettings(chatId);
         Set<String> currencies = new HashSet<>(Arrays.asList(userSettings.getCurrencies()));
 
+        currency = currency.replace(" ✅", "");
         if (currencies.contains(currency)) {
             currencies.remove(currency);
         } else {
@@ -117,8 +118,22 @@ public class SettingsButton {
         userSettings.setCurrencies(currencies.toArray(new String[0]));
 
         saveUserSettings(userSettings);
+        changeCurrencyButtonToSelected(update,userSettings,currencyTelegramBot,chatId);
     }
 
+    private void changeCurrencyButtonToSelected(Update update, UserSettings userSettings, CurrencyTelegramBot bot, String chatId) {
+        EditMessageReplyMarkup editMessageReplyMarkup = new EditMessageReplyMarkup();
+        editMessageReplyMarkup.setChatId(chatId);
+        editMessageReplyMarkup.setMessageId(update.getCallbackQuery().getMessage().getMessageId());
+        InlineKeyboardMarkup buttons = ButtonFactory.createCurrencyOptions(userSettings);
+        editMessageReplyMarkup.setReplyMarkup(buttons);
+        try {
+            bot.execute(editMessageReplyMarkup);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void time(SendMessage message) {
         String chatId = message.getChatId();
@@ -139,7 +154,7 @@ public class SettingsButton {
             userSettings.setNotificationTime(LocalTime.of(hour, 0, 0));
         }
 
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         time(createSendMessage(chatId));
         changeButtonToSelectedForTime(update,userSettings,currencyTelegramBot,chatId);
     }
@@ -159,10 +174,7 @@ public class SettingsButton {
     }
 
     private UserSettings getUserSettings(String chatId) {
-        return userStorage.getUsers().stream()
-                .filter(user -> user.getId().equals(chatId))
-                .findFirst()
-                .orElseGet(() -> createDefaultUserSettings(chatId));
+        return userStorage.getUser(chatId);
     }
 
     private void saveUserSettings(UserSettings userSettings) {

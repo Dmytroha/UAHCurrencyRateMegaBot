@@ -16,7 +16,7 @@ public class UserSettings {
 
     public UserSettings(String id) {
         this.id = id;
-        bank = "PrivatBank";
+        bank = "ПриватБанк";
         currencies = new String[]{"USD"};
         decimals = 2;
         notificationTime = LocalTime.of(9, 0, 0);

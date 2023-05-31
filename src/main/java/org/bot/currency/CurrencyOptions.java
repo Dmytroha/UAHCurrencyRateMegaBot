@@ -10,7 +10,7 @@ import org.bot.currency.monobank.CurrencyParser;
 
 public class CurrencyOptions {
     public static void main(String[] args) throws URISyntaxException, IOException {
-        System.out.println(display("NBU", "USD", 3));
+        System.out.println(display("Monobank", "USD", 3));
     }
 
     // Метод на вывод информации по валюте, где принимает бакн, валюту, знаки после
@@ -20,17 +20,17 @@ public class CurrencyOptions {
         double rate = 0;
         // Проходимся по банкам
         switch (bank) {
-            case "PrivatBank":
+            case "ПриватБанк":
                 rate = new PrivatCurrencyService().getRate(Currency.valueOf(currency));
                 break;
-            case "NBU":
+            case "НБУ":
                 rate = new NbuCurrencyService().getRate(Currency.valueOf(currency));
                 break;
-            case "Monobank":
-                if (currency != "USD" && currency != "EUR")
-                    rate = new CurrencyParser().getCurrency(currency).getRateCross();
-                else
+            case "Монобанк":
+                if (currency.equals("USD") || currency.equals("EUR"))
                     rate = new CurrencyParser().getCurrency(currency).getRateBuy();
+                else
+                    rate = new CurrencyParser().getCurrency(currency).getRateCross();
                 break;
         }
         // форматирование количества значений после запятой
