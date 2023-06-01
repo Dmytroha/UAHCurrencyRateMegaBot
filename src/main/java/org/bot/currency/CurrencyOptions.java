@@ -16,28 +16,43 @@ public class CurrencyOptions {
     // Метод на вывод информации по валюте, где принимает бакн, валюту, знаки после
     // запятой
     public static String display(String bank, String currency, int decimal) throws URISyntaxException, IOException {
+
         // Переменная куда получим значение валюті банка
-        double rate = 0;
+        double buy = 0.0;
+        double sale = 0.0;
         // Проходимся по банкам
         switch (bank) {
             case "ПриватБанк":
-                rate = new PrivatCurrencyService().getRate(Currency.valueOf(currency));
+                if(currency.equals("USD") || currency.equals("EUR")){
+                    buy = new PrivatCurrencyService().getRate(Currency.valueOf(currency));
+                    sale = new PrivatCurrencyService().getRate(Currency.valueOf(currency));
+                }
+                else{
+                    buy = new NbuCurrencyService().getRate(Currency.valueOf(currency));
+                    sale = new NbuCurrencyService().getRate(Currency.valueOf(currency));
+                }
                 break;
             case "НБУ":
-                rate = new NbuCurrencyService().getRate(Currency.valueOf(currency));
+                buy = new NbuCurrencyService().getRate(Currency.valueOf(currency));
+                sale = new NbuCurrencyService().getRate(Currency.valueOf(currency));
                 break;
             case "Монобанк":
-                if (currency.equals("USD") || currency.equals("EUR"))
-                    rate = new CurrencyParser().getCurrency(currency).getRateBuy();
-                else
-                    rate = new CurrencyParser().getCurrency(currency).getRateCross();
+                if (currency.equals("USD") || currency.equals("EUR")){
+                    buy = new CurrencyParser().getCurrency(currency).getRateBuy();
+                    sale = new CurrencyParser().getCurrency(currency).getRateSell();
+                }
+                else{
+                    buy = new CurrencyParser().getCurrency(currency).getRateCross();
+                    sale = new CurrencyParser().getCurrency(currency).getRateCross();
+                }
                 break;
         }
         // форматирование количества значений после запятой
         DecimalFormat df = new DecimalFormat("#." + "0".repeat(decimal));
-        String rateVal = df.format(rate);
+        String buyVal = df.format(buy);
+        String saleVal = df.format(sale);
         // Возврат информации ввиде строки
-        return "Курс в " + bank + ":" + currency + "/UAH\nПокупка: " + rateVal.toString() + "";
+        return "===============\nКурс: " + currency + "/UAH\n===============\nПокупка: " + buyVal + "\nПродаж: " +saleVal;
 
     }
 }

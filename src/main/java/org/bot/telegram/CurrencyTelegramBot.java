@@ -21,7 +21,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         getInfoButton = new GetInfoButton(userStorage);
         settingsButton = new SettingsButton(userStorage);
         //Таймер виводу користувачеві курсу валют
-        NotificationService.startNotificationProcess(userStorage,this);
+//        NotificationService.startNotificationProcess(userStorage,this);
     }
 
     @Override

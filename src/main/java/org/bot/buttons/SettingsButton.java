@@ -31,7 +31,8 @@ public class SettingsButton {
                 "settings.precision:Кількість знаків після коми",
                 "settings.bank:Банк",
                 "settings.currency:Валюта",
-                "settings.time:Час сповіщень"
+                "settings.time:Час сповіщень",
+                "settings.back:Головне меню"
         ));
         message.setReplyMarkup(buttons);
     }
@@ -117,7 +118,7 @@ public class SettingsButton {
 
         userSettings.setCurrencies(currencies.toArray(new String[0]));
 
-        saveUserSettings(userSettings);
+        new UserStorage().rewriteUser(userSettings);
         changeCurrencyButtonToSelected(update,userSettings,currencyTelegramBot,chatId);
     }
 
@@ -175,22 +176,6 @@ public class SettingsButton {
 
     private UserSettings getUserSettings(String chatId) {
         return userStorage.getUser(chatId);
-    }
-
-    private void saveUserSettings(UserSettings userSettings) {
-        List<UserSettings> users = userStorage.getUsers();
-        users = users.stream()
-                .map(user -> user.getId().equals(userSettings.getId()) ? userSettings : user)
-                .collect(Collectors.toList());
-        userStorage.saveUsers(users);
-    }
-
-    private UserSettings createDefaultUserSettings(String chatId) {
-        UserSettings defaultSettings = new UserSettings(chatId);
-        List<UserSettings> users = userStorage.getUsers();
-        users.add(defaultSettings);
-        userStorage.saveUsers(users);
-        return defaultSettings;
     }
 
     private SendMessage createSendMessage(String chatId) {

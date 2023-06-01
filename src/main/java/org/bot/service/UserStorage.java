@@ -3,6 +3,7 @@ package org.bot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.bot.model.UserSettings;
@@ -48,7 +49,7 @@ public class UserStorage {
         List<UserSettings> users = getUserList();
         UserSettings UserSettings = new UserSettings(id);
         users.add(UserSettings);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(users);
         try (FileWriter writer = new FileWriter("src/main/resources/model/user.json")) {
             writer.write(json);
@@ -56,13 +57,13 @@ public class UserStorage {
     }
 
     // Перезаписати юзера. Передавати об'єкт юзера
-    public void rewriteUser(UserSettings UserSettings){
+    public void rewriteUser(UserSettings UserSettings) {
         List<UserSettings> users = getUserList();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId().equals(UserSettings.getId()))
                 users.set(i, UserSettings);
         }
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(users);
         try (FileWriter writer = new FileWriter("src/main/resources/model/user.json")) {
             writer.write(json);

@@ -2,27 +2,27 @@
   "lastParsingTime": {
     "date": {
       "year": 2023,
-      "month": 5,
-      "day": 31
+      "month": 6,
+      "day": 1
     },
     "time": {
       "hour": 17,
-      "minute": 39,
-      "second": 18,
-      "nano": 257620700
+      "minute": 3,
+      "second": 19,
+      "nano": 683001400
     }
   },
   "nextParsingTime": {
     "date": {
       "year": 2023,
-      "month": 5,
-      "day": 31
+      "month": 6,
+      "day": 1
     },
     "time": {
       "hour": 17,
-      "minute": 44,
-      "second": 18,
-      "nano": 257620700
+      "minute": 8,
+      "second": 19,
+      "nano": 683001400
     }
   }
 }

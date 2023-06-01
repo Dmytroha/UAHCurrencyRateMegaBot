@@ -1,1 +1,94 @@
-[{"id":"1","bank":"PrivatBank","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"1","bank":"PrivatBank","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"2","bank":"PrivatBank","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"3","bank":"PrivatBank","currencies":["USD"],"decimals":2,"isNotify":false},{"id":"4","bank":"PrivatBank","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"569544832","bank":"ПриватБанк","currencies":["USD"],"decimals":3,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"5212478559","bank":"ПриватБанк","currencies":["USD"],"decimals":4,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"5274195960","bank":"Monobank","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"560350595","bank":"Монобанк","currencies":["USD"],"decimals":2,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true},{"id":"1984813079","bank":"ПриватБанк","currencies":["USD"],"decimals":4,"notificationTime":{"hour":9,"minute":0,"second":0,"nano":0},"isNotify":true}]
+[
+  {
+    "id": "569544832",
+    "bank": "Монобанк",
+    "currencies": [
+      "PLN",
+      "EUR",
+      "USD"
+    ],
+    "decimals": 2,
+    "notificationTime": {
+      "hour": 17,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  },
+  {
+    "id": "5212478559",
+    "bank": "Монобанк",
+    "currencies": [
+      "USD"
+    ],
+    "decimals": 4,
+    "notificationTime": {
+      "hour": 9,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  },
+  {
+    "id": "5274195960",
+    "bank": "Monobank",
+    "currencies": [
+      "USD"
+    ],
+    "decimals": 2,
+    "notificationTime": {
+      "hour": 9,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  },
+  {
+    "id": "560350595",
+    "bank": "НБУ",
+    "currencies": [
+      "USD"
+    ],
+    "decimals": 4,
+    "notificationTime": {
+      "hour": 13,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  },
+  {
+    "id": "1984813079",
+    "bank": "ПриватБанк",
+    "currencies": [
+      "USD"
+    ],
+    "decimals": 4,
+    "notificationTime": {
+      "hour": 9,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  },
+  {
+    "id": "457754839",
+    "bank": "ПриватБанк",
+    "currencies": [
+      "USD"
+    ],
+    "decimals": 2,
+    "notificationTime": {
+      "hour": 9,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "isNotify": true
+  }
+]
