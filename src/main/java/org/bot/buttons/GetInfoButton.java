@@ -18,6 +18,7 @@ public class GetInfoButton {
     }
 
     public void execute(SendMessage message) {
+        StringBuilder exchangeRateInfo = new StringBuilder();
         try {
             String chatId = message.getChatId();
             if(userStorage.isNewPerson(chatId)){
@@ -26,9 +27,9 @@ public class GetInfoButton {
             UserSettings userSettings = userStorage.getUser(chatId);
 
             for (String currency : userSettings.getCurrencies()) {
-                String exchangeRateInfo = CurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals());
-                message.setText("Ви обрали банк " + userSettings.getBank() + "\nВалюта " + Arrays.toString(userSettings.getCurrencies()) + "\nЧас сповіщення " + userSettings.getNotificationTime() + ".\n" + exchangeRateInfo);
+                exchangeRateInfo.append("\n"+CurrencyOptions.display(userSettings.getBank(), currency, userSettings.getDecimals()));
             }
+            message.setText("Ви обрали банк " + userSettings.getBank() + "\nВалюта " + Arrays.toString(userSettings.getCurrencies()) + "\nЧас сповіщення " + userSettings.getNotificationTime() + "." + exchangeRateInfo);
 
         } catch (Exception e) {
             System.err.println("Error: info button");
@@ -48,8 +49,3 @@ public class GetInfoButton {
         return new UserSettings(chatId);
     }
 }
-
-
-
-
-
